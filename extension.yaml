@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://sdk.netlify.com/sdk/config-schema.json
 config:
-  slug: legacy-connector
+  slug: 7n03bmwi-legacy-products
   name: legacy-connector
   description: A sample connector utilizing the legacy listing service
   scopes:
