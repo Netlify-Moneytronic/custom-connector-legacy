@@ -29,7 +29,7 @@ const connector = extension.addConnector({
 class ProductApiClient {
   API: string;
   constructor() {
-    this.API = `https://legacy-api.netlify.app/.netlify/functions/getData`;
+    this.API = `https://proxy-function.netlify.app/.netlify/functions/proxy`;
   }
   async getStores() {
     let apiUrl = this.API;
@@ -68,5 +68,5 @@ connector.sync(async ({ models, state }) => {
   });
 });
 
-//
+//Clear
 export { extension };
