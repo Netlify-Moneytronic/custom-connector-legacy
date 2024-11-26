@@ -55,10 +55,14 @@ connector.model(async ({ define }) => {
   });
 });
 
-connector.sync(async ({ models, state }) => {
-  const data = await state.client.getStores({});
 
+let productIds: string[] = [];
+
+connector.sync(async ({ models, state }) => {
+  const currentProductIds: string[] = []
+  const data = await state.client.getStores({});
   data.forEach((product: { id: any; }) => {
+    currentProductIds.push(product.id)
     models.Product.insert({
       ...product,
       _createdAt: new Date().toISOString(),
@@ -66,6 +70,23 @@ connector.sync(async ({ models, state }) => {
       contentId: product.id,
     });
   });
+
+  productIds.forEach(id => { if (!currentProductIds.includes(id)) { models.Product.delete(id) } })
+
+  productIds = currentProductIds;
 });
+
+// connector.sync(async ({ models, state }) => {
+//   const data = await state.client.getStores({});
+
+//   data.forEach((product: { id: any; }) => {
+//     models.Product.insert({
+//       ...product,
+//       _createdAt: new Date().toISOString(),
+//       _status: `published`,
+//       contentId: product.id,
+//     });
+//   });
+// });
 
 export { extension };
