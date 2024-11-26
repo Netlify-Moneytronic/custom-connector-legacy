@@ -1,6 +1,7 @@
 // Documentation: https://sdk.netlify.com
 import { NetlifyExtension } from "@netlify/sdk";
 import { makeConnectSettings } from "./schema/settings-schema";
+const { v4: uuidv4 } = require('uuid');
 
 
 const extension = new NetlifyExtension();
@@ -63,10 +64,9 @@ connector.sync(async ({ models, state }) => {
       ...product,
       _createdAt: new Date().toISOString(),
       _status: `published`,
-      contentId: product.id,
+      contentId: uuidv4(),
     });
   });
 });
 
-//Clear
 export { extension };
