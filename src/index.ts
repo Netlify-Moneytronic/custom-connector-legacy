@@ -2,8 +2,9 @@
 import { NetlifyExtension } from "@netlify/sdk";
 import { makeConnectSettings } from "./schema/settings-schema";
 
-
+//Declare the extension
 const extension = new NetlifyExtension();
+//Declare the connector
 const connector = extension.addConnector({
   typePrefix: "Stores",
   supports: {
@@ -25,11 +26,16 @@ const connector = extension.addConnector({
 
 });
 
+//Dynamic Connector Code Goes HERE:
 
+
+
+
+// Create API Client
 class ProductApiClient {
   API: string;
   constructor() {
-    this.API = `https://proxy-function.netlify.app/.netlify/functions/proxy`;
+    this.API = `https://fakestoreapi.com/products`;
   }
   async getStores() {
     let apiUrl = this.API;
@@ -40,7 +46,7 @@ class ProductApiClient {
 
 }
 
-
+//Create Model
 connector.model(async ({ define }) => {
   define.document({
     name: `Product`,
@@ -58,6 +64,7 @@ connector.model(async ({ define }) => {
 
 let productIds: string[] = [];
 
+//Sync your connector with API
 connector.sync(async ({ models, state }) => {
   const currentProductIds: string[] = []
   const data = await state.client.getStores({});
@@ -75,18 +82,5 @@ connector.sync(async ({ models, state }) => {
 
   productIds = currentProductIds;
 });
-
-// connector.sync(async ({ models, state }) => {
-//   const data = await state.client.getStores({});
-
-//   data.forEach((product: { id: any; }) => {
-//     models.Product.insert({
-//       ...product,
-//       _createdAt: new Date().toISOString(),
-//       _status: `published`,
-//       contentId: product.id,
-//     });
-//   });
-// });
 
 export { extension };
